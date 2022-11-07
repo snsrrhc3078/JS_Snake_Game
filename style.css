@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+}
+
+#bg{
+    width: 100vw;
+    height: 100vh;
+    display: table-cell;
+    vertical-align: middle;
+}
+#wrapper{
+    width: 500px;
+    height: 550px;
+    margin: auto;
+}
+#score-area{
+    width: 100%;
+    height: 50px;
+    background-color: pink;
+}
+#content-area{
+    width: 100%;
+    height: 500px;
+    background-color: antiquewhite;
+    position: relative;
+}
