@@ -1,5 +1,4 @@
 
-let contentArea;
 
 
 addEventListener("load", function(){
@@ -9,20 +8,23 @@ const MAP_WIDTH_HEIGHT = 500;
 const OBJECT_SIZE = 25;
 const MAP_SIZE = MAP_WIDTH_HEIGHT/OBJECT_SIZE;
 
+let contentArea;
 let head;
 let flag = false;
 let food = null;
 let directionBuffer=["right"];
+let id;
 
 let characterArray = [];
 let locationArray = [];
+let isGameOver = false;
 
 function init(){
     contentArea = document.querySelector("#content-area");
     // let a = new GameObject(contentArea, 30, 30, 30, 30)
     createHead();
 
-    setInterval(gameLoop, 32);
+    id = setInterval(gameLoop, 32);
 
     document.body.addEventListener("keydown", function(event){
         if(event.repeat == false){ // 키 누른채로 있어서 버퍼에 쌓이는거 방지
@@ -55,6 +57,12 @@ function gameLoop(){
         if(food.handleOnEaten()){
             food = null;
             createBody();
+        }
+
+        getBodiesDetecting();
+        if(isGameOver){
+            gameOver();
+            return 0;
         }
 
         head.tick();        
@@ -132,6 +140,16 @@ function bodyMove(){
     }
 }
 
+function getBodiesDetecting(){
+
+    for(let i = 1;i<characterArray.length;i++){
+        if(characterArray[i].getCollisionDetecting(head)){
+            isGameOver = true;
+        }
+    }
+}
+
+
 function getCharacterLocation(){
     // 만약 Character 객체들의 좌표값이 Object_SIZE의 정배수라면
     if(head.x % OBJECT_SIZE == 0 && head.y % OBJECT_SIZE == 0){
@@ -146,7 +164,7 @@ function getCharacterLocation(){
             })
         }
     }
-    console.log(locationArray[0].row, locationArray[0].col);
+    // console.log(locationArray[0].row, locationArray[0].col);
 }
 
 // food를 놓기 위해서는 현재 character 객체들이 있는곳을 제외한 빈공간의
@@ -185,4 +203,10 @@ function getPlaceAbleArray() {
         })
     })
     return result;
+}
+
+function gameOver(){
+    flag = false;
+    clearInterval(id);
+    alert("게임 오버");
 }
