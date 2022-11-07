@@ -103,6 +103,10 @@ function createBody(){
                 break;
     }
     characterArray.push(body);
+    locationArray.push({
+        row: body.x/OBJECT_SIZE,
+        col: body.y/OBJECT_SIZE,
+    })
 }
 
 // #객체조작
