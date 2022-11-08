@@ -45,14 +45,17 @@ function init(){
 // #루프
 function gameLoop(){
     if(flag){
-        // console.log(1);
-        setHeadDirection();
-        setBodyDirection();
+        // 만약 Character 객체들의 좌표값이 Object_SIZE의 정배수라면
+        if(head.x % OBJECT_SIZE == 0 && head.y % OBJECT_SIZE == 0){
+            setHeadDirection();
+            setBodyDirection();
+            getCharacterLocation();
+            isHeadOutMap();
+        }
         
         if(food==null){
             createFood();
         }
-        getCharacterLocation();
         food.detecting(head);
         if(food.handleOnEaten()){
             food = null;
@@ -119,18 +122,14 @@ function createBody(){
 
 // #객체조작
 function setHeadDirection(){
-    if(head.x % OBJECT_SIZE == 0 && head.y % OBJECT_SIZE == 0){
-        if(directionBuffer.length != 0)
-        head.direction = directionBuffer.shift();
-    }
+    if(directionBuffer.length != 0)
+    head.direction = directionBuffer.shift();
 }
 
 function setBodyDirection(){
-    if (head.x % OBJECT_SIZE == 0 && head.y % OBJECT_SIZE == 0) {
-        for (let i = characterArray.length-1; i >= 1; i--) {
-            characterArray[i].direction = characterArray[i - 1].before;
-            console.log(characterArray[i].direction);
-        }
+    for (let i = characterArray.length-1; i >= 1; i--) {
+        characterArray[i].direction = characterArray[i - 1].before;
+        console.log(characterArray[i].direction);
     }
 }
 function bodyMove(){
@@ -151,8 +150,6 @@ function getBodiesDetecting(){
 
 
 function getCharacterLocation(){
-    // 만약 Character 객체들의 좌표값이 Object_SIZE의 정배수라면
-    if(head.x % OBJECT_SIZE == 0 && head.y % OBJECT_SIZE == 0){
         // 이전에 있던 location배열의 값들을 비우고
         locationArray.length = 0;
 
@@ -163,7 +160,6 @@ function getCharacterLocation(){
                 col: characterArray[i].y/OBJECT_SIZE,
             })
         }
-    }
     // console.log(locationArray[0].row, locationArray[0].col);
 }
 
@@ -209,4 +205,10 @@ function gameOver(){
     flag = false;
     clearInterval(id);
     alert("게임 오버");
+}
+
+function isHeadOutMap(){
+    if((locationArray[0].row <=0 && head.direction == "left") || (locationArray[0].row > MAP_SIZE-2 && head.direction == "right") || (locationArray[0].col <= 0 && head.direction == "up") || (locationArray[0].col > MAP_SIZE-2 && head.direction == "down")){
+        isGameOver = true;
+    }
 }
