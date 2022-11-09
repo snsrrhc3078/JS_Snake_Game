@@ -21,7 +21,10 @@ let isGameOver = false;
 
 function init(){
     contentArea = document.querySelector("#content-area");
-    // let a = new GameObject(contentArea, 30, 30, 30, 30)
+    contentArea.style.backgroundPosition = `0 0, ${OBJECT_SIZE}px ${OBJECT_SIZE}px`;
+    contentArea.style.backgroundSize = `${OBJECT_SIZE*2}px ${OBJECT_SIZE*2}px`;
+
+
     createHead();
 
     id = setInterval(gameLoop, 32);
