@@ -31,12 +31,6 @@ function init(){
 
     createHead();
 
-    let d = new Date();
-    setInterval(function(){
-        let a = new Date();
-        console.log(parseInt((a-d) / 1000));
-    }, 1000);
-
     id = setInterval(gameLoop, 1000/(OBJECT_SIZE * 10 * level));
 
     document.body.addEventListener("keydown", function(event){
@@ -136,8 +130,23 @@ function createBody(){
 
 // #객체조작
 function setHeadDirection(){
-    if(directionBuffer.length != 0)
-    head.direction = directionBuffer.shift();
+    if(directionBuffer.length != 0){
+        let nextDirection = directionBuffer.shift();
+        switch(head.direction){
+            case "up": if(nextDirection != "down"){
+                head.direction = nextDirection;
+            }break;
+            case "down": if(nextDirection != "up"){
+                head.direction = nextDirection;
+            }break;
+            case "left": if(nextDirection != "right"){
+                head.direction = nextDirection;
+            }break;
+            case "right": if(nextDirection != "left"){
+                head.direction = nextDirection;
+            }break;
+        }
+    }
 }
 
 function setBodyDirection(){
