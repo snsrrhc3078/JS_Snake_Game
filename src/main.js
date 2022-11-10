@@ -54,6 +54,7 @@ function gameLoop(){
     if(flag){
         // 만약 Character 객체들의 좌표값이 Object_SIZE의 정배수라면
         if(head.x % OBJECT_SIZE == 0 && head.y % OBJECT_SIZE == 0){
+            autoPilot();
             setHeadDirection();
             setBodyDirection();
             getCharacterLocation();
@@ -240,4 +241,54 @@ function isHeadOutMap(){
 function addScore(){
     score++;
     document.querySelector("#score-area").innerText = "Score: " + score;
+}
+let mainFlag = true;
+let flag0 = true;
+let flag1 = true;
+let flag2 = true;
+let flag3 = true;
+
+let flag4 = true;
+let flag5 = true;
+function autoPilot(){
+    let hd = locationArray[0];
+
+    if(mainFlag == true){
+        if(hd.row == 18 && flag0 == true){
+            directionBuffer.push("up");
+            flag0 = false;
+        }else if(hd.row == 19 && hd.col == 1 && flag1 == true){
+            directionBuffer.push("left");
+            flag1 = false;
+        }else if(hd.row==1 && hd.col == 0 && flag2 == true){
+            directionBuffer.push("down");
+            flag2 = false;
+        }else if(hd.row==0 && hd.col == 18 && flag3 == true){
+            directionBuffer.push("right");
+            flag3 = false;
+        }else if(hd.row == 3 && hd.col == 19){
+            mainFlag = false;
+        }
+    }else{
+        if(hd.row == 18 && flag4 == true){
+            directionBuffer.push("up");
+            directionBuffer.push("left");
+            flag4 = false;
+            flag5 = true;
+        }else if(hd.row==2 && flag5 == true){
+            directionBuffer.push("up");
+            directionBuffer.push("right");
+            flag5 = false;
+            flag4 = true;
+        }
+
+        if(hd.row == 17 && hd.col == 0){
+            mainFlag =true;
+            flag2 = true;
+            flag3 = true;
+            flag4 = true;
+        }
+    }
+
+
 }
