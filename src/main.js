@@ -14,8 +14,9 @@ let flag = false;
 let food = null;
 let directionBuffer=["right"];
 let id;
-let level = 1;
+let level = 4;
 let score = 0;
+let isAutoPilot = false;
 
 let characterArray = [];
 let locationArray = [];
@@ -41,7 +42,11 @@ function init(){
                 case "ArrowRight": directionBuffer.push("right"); break;
                 case "ArrowDown": directionBuffer.push("down"); break;
                 case "ArrowLeft": directionBuffer.push("left"); break;
-                case "Space": flag = !flag;
+                case "Space": flag = !flag;break;
+                case "KeyQ": isAutoPilot = !isAutoPilot;
+                isAutoPilot ? console.log("Auto Pilot Activated") : 
+                console.log("Auto Pilot Disabled");
+                break;
             }
         }
         // console.log(head.direction);
@@ -71,6 +76,12 @@ function gameLoop(){
             addScore();
         }
 
+        if(characterArray.length == MAP_SIZE * MAP_SIZE){
+            clearInterval(id);
+            alert("게임 클리어");
+            return 0;
+        }
+
         getBodiesDetecting();
         if(isGameOver){
             gameOver();
@@ -86,7 +97,7 @@ function gameLoop(){
 
 // #객체생성
 function createHead(){
-    head = new Character(contentArea, OBJECT_SIZE * (MAP_SIZE / 4), OBJECT_SIZE * (MAP_SIZE/2), OBJECT_SIZE, OBJECT_SIZE, 1, "black", "right", characterArray.length);
+    head = new Character(contentArea, OBJECT_SIZE * (MAP_SIZE / 4), OBJECT_SIZE * (MAP_SIZE/2), OBJECT_SIZE, OBJECT_SIZE, 25, "black", "right", characterArray.length);
     characterArray.push(head);
     locationArray.push({
         row: head.x/OBJECT_SIZE,
@@ -215,7 +226,7 @@ function getPlaceAbleArray() {
         item.forEach(item2 => {
 
             let isMatch = locationArray.findIndex(item3 => {
-            item2.row ==  item3.row && item2.col == item3.col ? console.log(item2, item3):{};
+            //item2.row ==  item3.row && item2.col == item3.col ? console.log(item2, item3):{};
                 return item2.row == item3.row && item2.col == item3.col;
             })
             if (isMatch == -1) {
@@ -242,6 +253,7 @@ function addScore(){
     score++;
     document.querySelector("#score-area").innerText = "Score: " + score;
 }
+
 let mainFlag = true;
 let flag0 = true;
 let flag1 = true;
@@ -253,24 +265,26 @@ let flag5 = true;
 function autoPilot(){
     let hd = locationArray[0];
 
+    if(!isAutoPilot) return 0;
+
     if(mainFlag == true){
-        if(hd.row == 18 && flag0 == true){
+        if(hd.row == MAP_SIZE-2 && flag0 == true){
             directionBuffer.push("up");
             flag0 = false;
-        }else if(hd.row == 19 && hd.col == 1 && flag1 == true){
+        }else if(hd.row == MAP_SIZE-1 && hd.col == 1 && flag1 == true){
             directionBuffer.push("left");
             flag1 = false;
         }else if(hd.row==1 && hd.col == 0 && flag2 == true){
             directionBuffer.push("down");
             flag2 = false;
-        }else if(hd.row==0 && hd.col == 18 && flag3 == true){
+        }else if(hd.row==0 && hd.col == MAP_SIZE-2 && flag3 == true){
             directionBuffer.push("right");
             flag3 = false;
-        }else if(hd.row == 3 && hd.col == 19){
+        }else if(hd.row == 3 && hd.col == MAP_SIZE-1){
             mainFlag = false;
         }
     }else{
-        if(hd.row == 18 && flag4 == true){
+        if(hd.row == MAP_SIZE-2 && flag4 == true){
             directionBuffer.push("up");
             directionBuffer.push("left");
             flag4 = false;
