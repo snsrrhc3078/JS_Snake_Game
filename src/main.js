@@ -14,12 +14,16 @@ let flag = false;
 let food = null;
 let directionBuffer=["right"];
 let id;
+let level = 1;
+let score = 0;
 
 let characterArray = [];
 let locationArray = [];
 let isGameOver = false;
 
 function init(){
+
+    //배경 설정
     contentArea = document.querySelector("#content-area");
     contentArea.style.backgroundPosition = `0 0, ${OBJECT_SIZE}px ${OBJECT_SIZE}px`;
     contentArea.style.backgroundSize = `${OBJECT_SIZE*2}px ${OBJECT_SIZE*2}px`;
@@ -27,7 +31,13 @@ function init(){
 
     createHead();
 
-    id = setInterval(gameLoop, 32);
+    let d = new Date();
+    setInterval(function(){
+        let a = new Date();
+        console.log(parseInt((a-d) / 1000));
+    }, 1000);
+
+    id = setInterval(gameLoop, 1000/(OBJECT_SIZE * 10 * level));
 
     document.body.addEventListener("keydown", function(event){
         if(event.repeat == false){ // 키 누른채로 있어서 버퍼에 쌓이는거 방지
@@ -63,6 +73,7 @@ function gameLoop(){
         if(food.handleOnEaten()){
             food = null;
             createBody();
+            addScore();
         }
 
         getBodiesDetecting();
@@ -80,7 +91,7 @@ function gameLoop(){
 
 // #객체생성
 function createHead(){
-    head = new Character(contentArea, OBJECT_SIZE * (MAP_SIZE / 4), OBJECT_SIZE * (MAP_SIZE/2), OBJECT_SIZE, OBJECT_SIZE, 5, "black", "right", characterArray.length);
+    head = new Character(contentArea, OBJECT_SIZE * (MAP_SIZE / 4), OBJECT_SIZE * (MAP_SIZE/2), OBJECT_SIZE, OBJECT_SIZE, 1, "black", "right", characterArray.length);
     characterArray.push(head);
     locationArray.push({
         row: head.x/OBJECT_SIZE,
@@ -151,6 +162,7 @@ function getBodiesDetecting(){
     }
 }
 
+//#함수
 
 function getCharacterLocation(){
         // 이전에 있던 location배열의 값들을 비우고
@@ -214,4 +226,9 @@ function isHeadOutMap(){
     if((locationArray[0].row <=0 && head.direction == "left") || (locationArray[0].row > MAP_SIZE-2 && head.direction == "right") || (locationArray[0].col <= 0 && head.direction == "up") || (locationArray[0].col > MAP_SIZE-2 && head.direction == "down")){
         isGameOver = true;
     }
+}
+
+function addScore(){
+    score++;
+    document.querySelector("#score-area").innerText = "Score: " + score;
 }
