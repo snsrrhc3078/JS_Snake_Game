@@ -14,8 +14,8 @@ let flag = false;
 let food = null;
 let directionBuffer=["right"];
 let id;
-let level = 4;
-let score = 0;
+let level = 1;
+let score = 1;
 let isAutoPilot = false;
 
 let characterArray = [];
@@ -32,7 +32,7 @@ function init(){
 
     createHead();
 
-    id = setInterval(gameLoop, 1000/(OBJECT_SIZE * 10 * level));
+    id = setInterval(gameLoop, 1000/(OBJECT_SIZE * 2 * level));
 
     document.body.addEventListener("keydown", function(event){
         if(event.repeat == false){ // 키 누른채로 있어서 버퍼에 쌓이는거 방지
@@ -44,8 +44,12 @@ function init(){
                 case "ArrowLeft": directionBuffer.push("left"); break;
                 case "Space": flag = !flag;break;
                 case "KeyQ": isAutoPilot = !isAutoPilot;
-                isAutoPilot ? console.log("Auto Pilot Activated") : 
-                console.log("Auto Pilot Disabled");
+                if(isAutoPilot){
+                    mainFlag = flag0 = flag1 = flag2 = flag3 = flag4 = flag5 = true;
+                    console.log("Auto Pilot Activated")
+                }else{ 
+                    console.log("Auto Pilot Disabled");
+                }
                 break;
             }
         }
@@ -97,7 +101,7 @@ function gameLoop(){
 
 // #객체생성
 function createHead(){
-    head = new Character(contentArea, OBJECT_SIZE * (MAP_SIZE / 4), OBJECT_SIZE * (MAP_SIZE/2), OBJECT_SIZE, OBJECT_SIZE, 25, "black", "right", characterArray.length);
+    head = new Character(contentArea, OBJECT_SIZE * (MAP_SIZE / 4), OBJECT_SIZE * (MAP_SIZE/2), OBJECT_SIZE, OBJECT_SIZE, 5, "black", "right", characterArray.length);
     characterArray.push(head);
     locationArray.push({
         row: head.x/OBJECT_SIZE,
